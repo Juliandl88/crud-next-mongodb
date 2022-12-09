@@ -1,16 +1,15 @@
 import { connect, connection } from "mongoose";
 
-export async function  dbConnect(){ // Funcion para conectar
+const conn = {
+  isConnected: false,
+};
 
-    const db = await connect(process.env.MONGODB_URL)
-    
-    console.log(db.connection[0].readyState)
+export async function dbConnect() {
+  const db = await connect(process.env.MONGODB_URI);
+  console.log(db.connection.db.databaseName);
+  conn.isConnected = db.connections[0].readyState;
 }
 
-connection.on("connected", ()=>{
-    console.log("MongoDB is connected")
-})
+connection.on("connected", () => console.log("Mongodb connected to db"));
 
-connection.on("error", (err)=>{
-    console.log(err)
-})
+connection.on("error", (err) => console.error("Mongodb Errro:", err.message));
