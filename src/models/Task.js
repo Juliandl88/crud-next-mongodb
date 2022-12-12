@@ -1,3 +1,6 @@
+/* En SRC creamos una carpeta MODELS donde vamos a guardar los modelos de la base de datos 
+dentro de un archivo llamado TASK.JS */
+
 import { Schema, model, models } from "mongoose";
 
 const TaskSchema = new Schema(
