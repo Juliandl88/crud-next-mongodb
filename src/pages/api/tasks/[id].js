@@ -27,6 +27,13 @@ export default async (req, res) => {
       } 
 
     case "PUT": // actualizar una tarea
+      try {
+        const task = await Task.findByIdAndUpdate(id, body, { new : true });// busca la ID para actualizar. El parametro objeto es para que devuelva el objeto nuevo, no el viejo
+        if(!task) return res.status(404).json({ msg: "Task not found" }); // si no encuentra la tarea envia msg
+        return res.status(200).json({task}); // Si la encuentra envia un status 200
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
     case "DELETE": // borrar una tarea
       try {
            const deleteTask =  await Task.findByIdAndDelete(id);
