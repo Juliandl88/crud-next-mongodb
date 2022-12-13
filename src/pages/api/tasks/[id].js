@@ -23,11 +23,18 @@ export default async (req, res) => {
       if (!task) return res.status(404).json({ msg: "Task not found" }); // si no encuentra la tarea
       return res.status(200).json(task);
       } catch (error) {
-            return res.status(500).json({ msg: error.message }); // si no encuentra la tarea
+            return res.status(500).json({ msg: error.message }); // si no encuentra la tarea para mostrar
       } 
 
     case "PUT": // actualizar una tarea
     case "DELETE": // borrar una tarea
+      try {
+           const deleteTask =  await Task.findByIdAndDelete(id);
+           if(!deleteTask) return res.status(404).json({msg: "Task not found"});
+           return res.status(204).json()
+      } catch (error) {
+        return res.status(400).json({ msg: error.message }); // si no encuentra la tarea para borrar
+      }
 
     default:
       return res.status(400).json({ msg: "This method is not supported" });
