@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const { method, body } = req; // Desustructuro los req.method
 
   switch (method) {
-    case "GET": // MOSTRAR OBJETOS
+    case "GET": // MOSTRAR TAREA
       try {
         const tasks = await Task.find();
         return res.status(200).json(tasks);
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: error.message });
       }
 
-    case "POST": // CREAR OBJETOS
+    case "POST": // CREAR TAREA
       try {
         const newTask = new Task(body); // Creamos un objeto con el título de la descripción
         const savedTask = await newTask.save(); // Guardamos el objeto en una constante del
