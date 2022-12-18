@@ -1,4 +1,5 @@
 const HomePage = () => {
+  console.log("Frontend");
   return (
     <div>
       <h1>Home page</h1>
@@ -6,3 +7,10 @@ const HomePage = () => {
   );
 };
 export default HomePage;
+
+export const getServerSideProps = async (ctx) => {
+  console.log("Backend");
+  return {
+    props: {},
+  };
+};
