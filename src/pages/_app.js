@@ -1,8 +1,13 @@
-import '../styles/globals.css'
-import 'semantic-ui-css/semantic.min.css' // Importamos semantic en el componente raiz
+import { Layout } from "../components/Layout";
+import "semantic-ui-css/semantic.min.css";
+import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  );
 }
 
-export default MyApp
+export default MyApp;

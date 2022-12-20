@@ -1,49 +1,45 @@
-/* Este archivo se crea para generar rutas dinámicas, de esta format
-podemos obtener una tarea en particular rastreandola por su ID*/
+import { dbConnect } from "utils/mongoose";
+import Task from "models/Task";
 
-import { dbConnect } from "utils/mongoose"; // importamos la conexión a la bd
-import Task from "models/Task"; // importo el modelo de tares
+dbConnect();
 
-dbConnect(); // Conectamos a la base de datos
-
-// eslint-disable-next-line import/no-anonymous-default-export
-export default async (req, res) => {
-  console.log(req.query); // En el argumento van los datos que varian o los de la consulta
-
+export default async function tasksHandler(req, res) {
   const {
     method,
-    body,
     query: { id },
-  } = req; // desustructuro para no tener que tipear de más
+    body,
+  } = req;
 
   switch (method) {
-    case "GET": // mostrar una tarea
+    case "GET":
       try {
-        const task = await Task.findById(id); // busca la tarea
-      if (!task) return res.status(404).json({ msg: "Task is not found" }); // si no encuentra la tarea
-      return res.status(200).json(task);
+        const task = await Task.findById(id);
+        if (!task) return res.status(404).json({ msg: "Task does not exists" });
+        return res.status(200).json(task);
       } catch (error) {
-            return res.status(500).json({ msg: error.message }); // si no encuentra la tarea para mostrar
-      } 
-
-    case "PUT": // actualizar una tarea
-      try {
-        const task = await Task.findByIdAndUpdate(id, body, { new : true });// busca la ID para actualizar. El parametro objeto es para que devuelva el objeto nuevo, no el viejo
-        if(!task) return res.status(404).json({ msg: "Task is not found" }); // si no encuentra la tarea envia msg
-        return res.status(200).json({task}); // Si la encuentra envia un status 200
-      } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(400).json({ msg: error.message });
       }
-    case "DELETE": // borrar una tarea
+    case "PUT":
       try {
-           const deleteTask =  await Task.findByIdAndDelete(id);
-           if(!deleteTask) return res.status(404).json({msg: "Task is not found"});
-           return res.status(204).json()
+        const task = await Task.findByIdAndUpdate(id, body, {
+          new: true,
+          runValidators: true,
+        });
+        if (!task) return res.status(404).json({ msg: "Task does not exists" });
+        return res.status(200).json(task);
       } catch (error) {
-        return res.status(400).json({ msg: error.message }); // si no encuentra la tarea para borrar
+        return res.status(400).json({ msg: error.message });
       }
-
+    case "DELETE":
+      try {
+        const deletedTask = await Task.findByIdAndDelete(id);
+        if (!deletedTask)
+          return res.status(404).json({ msg: "Task does not exists" });
+        return res.status(204).json();
+      } catch (error) {
+        return res.status(400).json({ msg: error.message });
+      }
     default:
       return res.status(400).json({ msg: "This method is not supported" });
   }
-};
+}

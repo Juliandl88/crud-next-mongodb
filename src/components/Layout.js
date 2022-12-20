@@ -1,9 +1,13 @@
-import React from 'react'
+import Head from "next/head";
+import { Navbar } from "./Navbar";
 
-const Layout = () => {
-  return (
-    <div>Layout</div>
-  )
-}
+export const Layout = ({ children }) => (
+  <>
+    <Head>
+      <title>Task App</title>
+    </Head>
+    <Navbar />
 
-export default Layout
+    <main className="bg-zinc-800 min-h-screen">{children}</main>
+  </>
+);
